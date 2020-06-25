@@ -1,0 +1,179 @@
+
+<ion-header color="tertiary" >
+  <ion-toolbar color="tertiary">
+    <ion-buttons color="tertiary" slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Pagamento</ion-title>
+  </ion-toolbar>
+</ion-header>  
+<ion-content>
+  <form [formGroup]="pagamentoForm">
+    <ion-list>  
+      <ion-item *ngIf="pagamento" >
+        <ion-label position="floating">Cliente</ion-label><br>
+        <ionic-selectable headerColor="tertiary"
+                          [(ngModel)]="pagamento.cliente"
+                          [items]="clients"
+                          [isMultiple]="true"
+                          itemValueField="id"
+                          itemTextField="nome"
+                          itemIconSlot="end"
+                          [canSearch]="true"
+                          (click)="onClick()"
+                          (onOpen)="onOpen($event)"
+                          (onChange)="tipoChangeCliente($event)"
+                          searchPlaceholder="Buscar cliente"
+                          closeButtonSlot="end"
+                          closeButtonText="Voltar"
+                          formControlName="cliente">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item *ngIf="pagamento" >
+        <ion-label position="floating" >Data do Pagamento</ion-label>
+        <ion-datetime display-format="DD/MM/YYYY" 
+                      [(ngModel)]="pagamento.data" 
+                      min="2018-01-01" 
+                      max="2030-31-12"
+                      doneText="OK"
+                      cancelText="Fechar"
+                      mode="ios"
+                      formControlName="data"></ion-datetime>
+      </ion-item>
+     
+      <ion-item *ngIf="pagamento" >
+        <ion-label position="floating">Servicos</ion-label><br>
+        <ionic-selectable headerColor="tertiary"
+                          [(ngModel)]="pagamento.servicos"
+                          [items]="servs"
+                          [isMultiple]="true"
+                          itemValueField="id"
+                          itemTextField="nome"
+                          itemIconSlot="end"
+                          [canSearch]="true"
+                          (click)="onClick()"
+                          (onOpen)="onOpen($event)"
+                          (onChange)="tipoChange($event)"
+                          searchPlaceholder="Buscar serviço"
+                          closeButtonSlot="end"
+                          closeButtonText="Voltar"
+                          formControlName="servicos">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item *ngIf="pagamento">
+          <ion-label position="floating">Valor do pagamento</ion-label>
+          <ion-input required type="text" 
+                    placeholder="(R$) Real" 
+                    [brmasker]="{money: true , thousand: '.',  decimalCaracter: ',', decimal: '2'}"
+                    [(ngModel)]="pagamento.valor_servicos"
+                    readonly
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>  
+      <ion-item>
+        <ion-grid fixed>
+          <ion-row>
+              <ion-label position="floating">Desconto</ion-label>
+          </ion-row>
+          <div style="height: 3vh"></div>
+          <ion-row>
+            <ion-range step="1"
+                        mode="ios"
+                        pin="true"
+                        debounce="500"
+                        (ionChange)="aplicaDesconto($event)"
+                        [(ngModel)]="pagamento.percentual_de_desconto"
+                        readonly
+                        [ngModelOptions]="{standalone: true}">
+              <ion-icon size="small" color="tertiary" slot="start" name="remove"></ion-icon>
+              <ion-icon slot="end" color="tertiary" name="add"></ion-icon>
+            </ion-range>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-item *ngIf="pagamento">
+        <ion-label position="floating">Valor com desconto</ion-label>
+        <ion-input required type="text" 
+                   placeholder="(R$) Real" 
+                   [brmasker]="{money: true , thousand: '.',  decimalCaracter: ',', decimal: '2'}"
+                   [(ngModel)]="pagamento.valor_pago"
+                   [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>  
+    </ion-list>
+  </form>
+</ion-content>
+<ion-fab vertical="bottom" 
+         horizontal="end" 
+         slot="fixed">
+  <ion-fab-button >
+    <ion-icon color="light" name="document"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top" *ngIf="pagamentoID != null">
+    <ion-fab-button (click)="deletar()">
+      <ion-icon name="trash" color="danger"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>   
+  <ion-fab-list side="start">
+    <ion-fab-button (click)="salvarPagamento()">
+      <ion-icon color="primary" name="save"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>    
+</ion-fab>
+
+
+
+<!-- <ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons color="tertiary" slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Pagamento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Cliente</ion-label>
+      <ion-searchbar animated="true" value="cliente"></ion-searchbar>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Pagamento Pendente</ion-label>
+      <ion-select>
+        <ion-select-option value="pacote">Dia das Mães</ion-select-option>
+        <ion-select-option value="pacote">Dia da Mulher</ion-select-option>
+        <ion-select-option value="pacote">Pé + Mão</ion-select-option>
+        <ion-select-option value="pacote">Corte Grátis R$100,00 em serviços</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <div *ngFor="let parc of parcelas">
+      <ion-item color="{{parc.cor}}">
+        <ion-label fill="clear" full large> {{parc.parcela}} - {{parc.vencimento}} - {{parc.vlrParc}}  </ion-label>
+        <ion-button color="success" slot="end" size="small">
+          <ion-icon name="logo-usd" size="small"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </div>
+    <ion-item>
+      <ion-label slot="start">Total a Pagar:</ion-label>
+      <ion-input type="number" slot="end" disabled="true">R$ 300,00</ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+      </ion-col>
+      <ion-col>
+        <ion-toolbar>
+          <ion-button color="success" id="btn-cadastrar">
+            Cadastrar
+            <ion-icon name="save"></ion-icon>
+          </ion-button>
+        </ion-toolbar>
+      </ion-col>
+      <ion-col>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer> -->

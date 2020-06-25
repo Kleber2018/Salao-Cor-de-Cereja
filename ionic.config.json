@@ -1,0 +1,7 @@
+{
+  "name": "Cor de Cereja",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

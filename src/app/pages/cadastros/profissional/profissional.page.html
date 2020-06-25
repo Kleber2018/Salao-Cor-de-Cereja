@@ -1,0 +1,211 @@
+<ion-header color="tertiary" >
+  <ion-toolbar color="tertiary">
+    <ion-buttons color="tertiary" slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Profissional</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form [formGroup]="profissionalForm">
+    <ion-list>
+      <ion-item *ngIf="profissional">
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input required type="text" 
+                   [(ngModel)]="profissional.nome"
+                   formControlName="nome"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">CPF</ion-label>
+        <ion-input placeholder="000.000.000-00" 
+                   type="text" 
+                   [(ngModel)]="profissional.cpf"
+                   [ngModelOptions]="{standalone: true}"
+                   maxlength="14"
+                   mask="000.000.000-00"></ion-input>
+      </ion-item>
+      
+      <ion-item *ngIf="profissional">
+          <ion-label position="floating">Telefone Principal</ion-label>
+          <ion-input placeholder="(00) 00000-0000" 
+                     type="fone" 
+                     [(ngModel)]="profissional.tel1"
+                     formControlName="tel1"
+                     mask="(00) 00000-0000"></ion-input>
+        </ion-item>  
+       
+      <ion-item *ngIf="profissional">
+        <ion-label>Sexo</ion-label>
+        <ion-select cancel-text="Cancelar" 
+                    ok-text="Selecionar" 
+                    placeholder="Selecione" 
+                    [(ngModel)]="profissional.genero"
+                    [ngModelOptions]="{standalone: true}">
+          <div *ngFor="let g of genero">
+            <ion-select-option value="{{g.sexo}}" 
+                              [selected]="profissional.genero===g.sexo">{{g.sexo}}
+            </ion-select-option>
+          </div>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="profissional" >
+        <ion-label position="floating">Função</ion-label><br>
+        <ionic-selectable headerColor="tertiary"
+                          [(ngModel)]="profissional.funcao"
+                          [items]="funcoesCadastradas"
+                          [isMultiple]="true"
+                          itemValueField="id"
+                          itemTextField="nome"
+                          itemIconSlot="end"
+                          [canSearch]="true"
+                          (click)="onClick()"
+                          (onOpen)="onOpen($event)"
+                          (onChange)="tipoChange($event)"
+                          searchPlaceholder="Buscar funções"
+                          closeButtonSlot="end"
+                          closeButtonText="Voltar"
+                          formControlName="funcao">
+        </ionic-selectable>
+      </ion-item>
+
+      <ion-item *ngIf="profissional">
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="email" 
+                    [(ngModel)]="profissional.email"
+                    formControlName="email"></ion-input>
+      </ion-item> 
+  
+
+
+      <ion-list-header color="tertiary">
+        <ion-label position="fixed">Endereço</ion-label>
+        <ion-button color="tertiary" (click)="end()">
+          <ion-icon slot="icon-only" color="light" clear size="small" [name]="endAtv ? 'arrow-round-up' : 'arrow-round-down'"></ion-icon>
+        </ion-button>
+      </ion-list-header>
+        <ion-item *ngIf="profissional" id="cep" >
+          <ion-label position="floating">CEP</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="profissional.cep"
+                    [ngModelOptions]="{standalone: true}"
+                    mask="00000-000"></ion-input>
+          <ion-button slot="end" 
+                      (click)="buscaCEP(profissional.cep)"
+                      class="cep">Buscar CEP</ion-button>
+        </ion-item>
+        
+      <div *ngIf="endAtv">
+        <ion-item *ngIf="profissional">
+          <ion-label position="floating">Logradouro</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="profissional.logradouro"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="profissional">
+          <ion-label position="floating">Nr</ion-label>
+          <ion-input type="number" 
+                    [(ngModel)]="profissional.nr"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="profissional">
+          <ion-label position="floating">Complemento</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="profissional.complemento"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="profissional">
+          <ion-label position="floating">Bairro</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="profissional.bairro"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="profissional">
+          <ion-label position="floating">Cidade</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="profissional.cidade"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="profissional">
+          <ion-label>UF - Estado</ion-label>
+          <ion-select cancel-text="Cancelar" 
+                      ok-text="Selecionar" 
+                      placeholder="Selecione" 
+                      [(ngModel)]="profissional.uf"
+                      [ngModelOptions]="{standalone: true}">
+            <div *ngFor="let estado of estados">
+              <ion-select-option value="{{estado.uf}}" 
+                                [selected]="profissional.uf===estado.uf">{{estado.uf}}
+              </ion-select-option>
+            </div>
+          </ion-select>
+        </ion-item>
+      </div>
+    </ion-list>
+  </form>
+
+  <form [formGroup]="profissionalLoginForm" *ngIf="!this.profissionalID">
+    <ion-list-header color="tertiary">
+          <ion-label position="fixed">Login</ion-label>
+    </ion-list-header>
+   <ion-list>
+      <ion-item>
+          <ion-input [(ngModel)]="senha"
+                      formControlName="senha"
+                      type="password"
+                      placeholder="Senha"
+                      clearInput clearOnEdit="false">
+          </ion-input>
+        </ion-item>  
+    </ion-list>
+   
+  </form>
+  <form [formGroup]="profissionalLoginForm" *ngIf="this.profissionalID">
+    <ion-list-header color="tertiary">
+          <ion-label position="fixed">Login</ion-label>
+    </ion-list-header>
+   <ion-list>
+      <ion-item>
+        <ion-button (click)="redefinirSenha()">
+          <ion-icon slot="start" name="clock"></ion-icon> Redefinir Senha
+        </ion-button>
+      </ion-item>  
+    </ion-list>
+  </form>
+  <ion-item *ngIf="profissional">
+    <ion-label>Nivel no Sistema</ion-label>
+    <ion-select cancel-text="Cancelar" 
+                ok-text="Selecionar" 
+                placeholder="Selecione" 
+                [(ngModel)]="profissional.nivel"
+                [ngModelOptions]="{standalone: true}">
+      <div *ngFor="let nv of nivelAcesso">
+        <ion-select-option value="{{nv.nivel}}" 
+                          [selected]="profissional.nivel===nv.nivel">{{nv.nivel}}
+        </ion-select-option>
+      </div>
+    </ion-select>
+  </ion-item>
+
+  <ion-label><br><br>local: </ion-label>
+        <ion-label>lat: {{this.profissional.latitude}} </ion-label>
+        <ion-label>lon: {{this.profissional.longitude}}</ion-label>
+
+</ion-content>
+<ion-fab vertical="bottom" 
+         horizontal="end" 
+         slot="fixed">
+  <ion-fab-button >
+    <ion-icon color="light" name="document"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top" *ngIf="profissionalID != null">
+    <ion-fab-button (click)="deletar()">
+      <ion-icon name="trash" color="danger"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>   
+  <ion-fab-list side="start">
+    <ion-fab-button (click)="salvarProfissional()">
+      <ion-icon color="primary" name="save"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>    
+</ion-fab>

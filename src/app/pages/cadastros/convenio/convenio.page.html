@@ -1,0 +1,83 @@
+<ion-header color="tertiary">
+  <ion-toolbar color="tertiary">
+    <ion-buttons color="tertiary" slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Convenio</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form [formGroup]="convenioForm" >
+    <ion-list>
+      <ion-item *ngIf="convenio">
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input required type="text" 
+                   [(ngModel)]="convenio.nome"
+                   formControlName="nome"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="convenio">
+        <ion-label position="floating">CNPJ</ion-label>
+        <ion-input placeholder="00.000.000/0000-00" 
+                   type="text" 
+                   [(ngModel)]="convenio.cnpj"
+                   maxlength="18"
+                   mask="00.000.000/0000-00"
+                   formControlName="cnpj"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="convenio">
+        <ion-label position="floating">Desconto</ion-label>
+        <ion-input type="text" 
+                   [(ngModel)]="convenio.desconto"
+                   formControlName="desconto"
+                   mask="00%"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="convenio">
+        <ion-label position="floating">Dia de Pagamento</ion-label>
+        <ion-datetime display-format="DD"
+                      [(ngModel)]="convenio.dia_pagamento"
+                      formControlName="dia_pagamento"
+                      cancel-text="Cancelar"
+                      ok-text="Selecionar"></ion-datetime>
+      </ion-item>
+      <ion-item *ngIf="convenio">
+        <ion-label position="floating">Data de Vencimento</ion-label>
+        <ion-datetime display-format="DD/MM/YYYY"
+                      [(ngModel)]="convenio.dia_vencimento"
+                      min="2018-01-01" 
+                      max="2030-31-12"
+                      doneText="OK"
+                      cancelText="Fechar"
+                      mode="ios"
+                      formControlName="dia_vencimento"></ion-datetime>
+      </ion-item>
+      <!-- <ion-item>
+          <ion-button type="submit" 
+                      color="tertiary" 
+                      expand="block" 
+                      class="login-button" 
+                      ion-button 
+                      block 
+                      outline>
+          Gravar
+        </ion-button>
+      </ion-item> -->
+    </ion-list>
+  </form>
+</ion-content>
+<ion-fab vertical="bottom" 
+         horizontal="end" 
+         slot="fixed">
+  <ion-fab-button >
+    <ion-icon color="light" name="document"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top" *ngIf="convenioID != null">
+    <ion-fab-button (click)="deletar()">
+      <ion-icon name="trash" color="danger"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>   
+  <ion-fab-list side="start">
+    <ion-fab-button (click)="salvarConvenio()">
+      <ion-icon color="primary" name="save"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>    
+</ion-fab>

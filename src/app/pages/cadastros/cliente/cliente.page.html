@@ -1,0 +1,158 @@
+<ion-header color="tertiary" >
+  <ion-toolbar color="tertiary">
+    <ion-buttons color="tertiary" slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Cliente</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form [formGroup]="clienteForm">
+    <ion-list>
+      <ion-item *ngIf="cliente">
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input required type="text" 
+                   [(ngModel)]="cliente.nome"
+                   formControlName="nome"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">CPF</ion-label>
+        <ion-input placeholder="000.000.000-00" 
+                   type="text" 
+                   [(ngModel)]="cliente.cpf"
+                   [ngModelOptions]="{standalone: true}"
+                   maxlength="14"
+                   mask="000.000.000-00"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="cliente">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" 
+                   [(ngModel)]="cliente.email"
+                   formControlName="email"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="cliente">
+        <ion-label position="floating">Telefone Principal</ion-label>
+        <ion-input placeholder="(00) 00000-0000" 
+                   type="fone" 
+                   [(ngModel)]="cliente.tel1"
+                   formControlName="tel1"
+                   mask="(00) 00000-0000"></ion-input>
+      </ion-item>  
+      <ion-item *ngIf="cliente">
+        <ion-label position="floating">Telefone Secundario</ion-label>
+        <ion-input placeholder="(00) 00000-0000"          
+                   type="fone" 
+                   [(ngModel)]="cliente.tel2"
+                   [ngModelOptions]="{standalone: true}"
+                   mask="(00) 00000-0000"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="cliente">
+        <ion-label>Sexo</ion-label>
+        <ion-select cancel-text="Cancelar" 
+                    ok-text="Selecionar" 
+                    placeholder="Selecione" 
+                    [(ngModel)]="cliente.genero"
+                    [ngModelOptions]="{standalone: true}">
+          <div *ngFor="let g of genero">
+            <ion-select-option value="{{g.sexo}}" 
+                              [selected]="cliente.genero===g.sexo">{{g.sexo}}
+            </ion-select-option>
+          </div>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="cliente">
+        <ion-label>Convenio</ion-label>
+        <ion-select [(ngModel)]="cliente.convenio"
+                    [ngModelOptions]="{standalone: true}">
+          <ion-searchbar></ion-searchbar>
+          <div *ngFor="let c of convenios">
+            <ion-select-option value="{{c.id}}" 
+                               [selected]="cliente.convenio===c.id">
+              {{c.nome}}
+            </ion-select-option>
+          </div>
+        </ion-select>
+      </ion-item>
+      <ion-list-header color="tertiary">
+        <ion-label position="fixed">Endereço</ion-label>
+        <ion-button color="tertiary" (click)="end()">
+          <ion-icon slot="icon-only" color="light" clear size="small" [name]="endAtv ? 'arrow-round-up' : 'arrow-round-down'"></ion-icon>
+        </ion-button>
+      </ion-list-header>
+        <ion-item *ngIf="cliente" id="cep" >
+          <ion-label position="floating">CEP</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="cliente.cep"
+                    [ngModelOptions]="{standalone: true}"
+                    mask="00000-000"></ion-input>
+          <ion-button slot="end" 
+                      (click)="buscaCEP(cliente.cep)"
+                      class="cep">Buscar CEP</ion-button>
+        </ion-item>
+
+      <div *ngIf="endAtv">
+        <ion-item *ngIf="cliente">
+          <ion-label position="floating">Logradouro</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="cliente.logradouro"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="cliente">
+          <ion-label position="floating">Nr</ion-label>
+          <ion-input type="number" 
+                    [(ngModel)]="cliente.nr"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="cliente">
+          <ion-label position="floating">Complemento</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="cliente.complemento"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="cliente">
+          <ion-label position="floating">Bairro</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="cliente.bairro"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="cliente">
+          <ion-label position="floating">Cidade</ion-label>
+          <ion-input type="text" 
+                    [(ngModel)]="cliente.cidade"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="cliente">
+          <ion-label>UF - Estado</ion-label>
+          <ion-select cancel-text="Cancelar" 
+                      ok-text="Selecionar" 
+                      placeholder="Selecione" 
+                      [(ngModel)]="cliente.uf"
+                      [ngModelOptions]="{standalone: true}">
+            <div *ngFor="let estado of estados">
+              <ion-select-option value="{{estado.uf}}" 
+                                [selected]="cliente.uf===estado.uf">{{estado.uf}}
+              </ion-select-option>
+            </div>
+          </ion-select>
+        </ion-item>
+      </div>
+    </ion-list>
+  </form>
+</ion-content>
+<ion-fab vertical="bottom" 
+         horizontal="end" 
+         slot="fixed">
+  <ion-fab-button >
+    <ion-icon color="light" name="document"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top" *ngIf="clienteID != null">
+    <ion-fab-button (click)="deletar()">
+      <ion-icon name="trash" color="danger"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>   
+  <ion-fab-list side="start">
+    <ion-fab-button (click)="salvarCliente()">
+      <ion-icon color="primary" name="save"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>    
+</ion-fab>

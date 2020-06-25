@@ -1,0 +1,90 @@
+<ion-header color="tertiary" >
+  <ion-toolbar color="tertiary">
+    <ion-buttons color="tertiary" slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Serviço</ion-title>
+  </ion-toolbar>
+</ion-header>  
+<ion-content>
+  <form [formGroup]="servicoForm">
+    <ion-list> 
+      <ion-item *ngIf="servico" >
+        <ion-label>Tipo</ion-label><br>
+        <ionic-selectable
+          headerColor="tertiary"
+          [(ngModel)]="servico.tipo"
+          [items]="tipos"
+          itemValueField="id"
+          itemTextField="nome"
+          itemIconSlot="end"
+          [canSearch]="true"
+          (click)="onClick()"
+          (onChange)="tipoChange($event)"
+          (onOpen)="onOpen($event)"
+          searchPlaceholder="Buscar tipos de serviço"
+          closeButtonSlot="end"
+          closeButtonText="Voltar"
+          formControlName="tipo">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item *ngIf="servico">
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input required type="text" 
+                   [(ngModel)]="servico.nome"
+                   placeholder="Nome do serviço" 
+                   formControlName="nome"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="servico">
+        <ion-label position="floating">Descrição</ion-label>
+        <ion-input required type="text" 
+                   [(ngModel)]="servico.descricao"
+                   placeholder="Descrição do serviço" 
+                   formControlName="descricao"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Tempo médio</ion-label>
+        <ion-datetime formControlName="tempo_medio"
+                      [(ngModel)]="servico.tempo_medio"
+                      minuteValues="0,15,30,45"
+                      hourValues="0,1,2,3,4,5"
+                      done-text="OK"
+                      cancel-text="Retornar"
+                      placeholder="HH:MM"
+                      display-format="HH:mm"></ion-datetime>
+      </ion-item>
+      <ion-item *ngIf="servico">
+        <ion-label position="floating">Materiais utilizados</ion-label>
+        <ion-input required type="text" 
+                   [(ngModel)]="servico.materiais"
+                   placeholder="Descrição dos materiais utilizados" 
+                   formControlName="materiais"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="servico">
+        <ion-label position="floating">Preço</ion-label>
+        <ion-input required type="text" 
+                   placeholder="(R$) Real" 
+                   [brmasker]="{money: true , thousand: '.',  decimalCaracter: ',', decimal: '2'}"
+                   [(ngModel)]="servico.preco"
+                   formControlName="preco"></ion-input>
+      </ion-item>  
+    </ion-list>
+  </form>
+</ion-content>
+<ion-fab vertical="bottom" 
+         horizontal="end" 
+         slot="fixed">
+  <ion-fab-button >
+    <ion-icon color="light" name="document"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top" *ngIf="servicoID != null">
+    <ion-fab-button (click)="deletar()">
+      <ion-icon name="trash" color="danger"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>   
+  <ion-fab-list side="start">
+    <ion-fab-button (click)="salvarServico()">
+      <ion-icon color="primary" name="save"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>    
+</ion-fab>

@@ -1,0 +1,138 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons color="tertiary" slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Agenda
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-toolbar>
+    <ion-segment color="primary" (ionChange)="segmentChanged($event)">
+      <ion-segment-button checked="pgAgenda" value="Agenda">
+        Agenda<br>
+        <ion-icon name="calendar"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="Agendar">
+        Agendar<br>
+        <ion-icon name="time"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  <div *ngIf="pgAgenda; else blocoElse">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Agendamentos do dia</ion-label>
+        <ion-datetime value="2019-05-20" display-format="DD/MM/YYYY" min="2015-01-01" max="2030-01-01"></ion-datetime>
+      </ion-item>
+      <ion-list-header>Profissional</ion-list-header>
+      <ion-item>
+        <ion-label>Profissional</ion-label>
+        <ion-select>
+          <ion-select-option selected value="">Jurema</ion-select-option>
+          <ion-select-option value="">Carla</ion-select-option>
+          <ion-select-option value="">Rogerio</ion-select-option>
+          <ion-select-option value="">Patricia</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div *ngFor="let hor of horarios">
+        <ion-item color="{{hor.color}}">
+          <ion-label fill="clear" slot="start"> {{hor.HH_MM}} </ion-label>
+          <div *ngIf="hor.ocupado; else blocoElse" slot="end">
+            <ion-icon color="primary" name="checkmark-circle" size="large"></ion-icon>
+          </div>
+          <ng-template #blocoElse>
+            <div slot="end">
+              <ion-button>
+                Agendar
+              </ion-button>
+            </div>
+          </ng-template>
+        </ion-item>
+      </div>
+    </ion-list>
+  </div>
+  <ng-template #blocoElse>
+    <div>
+      <ion-list>
+        <ion-item>
+          <ion-label>Dia 20/05/2019</ion-label>
+          <br>
+          <ion-label>Horario 09:00 - 10:30</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Cliente</ion-label>
+          <ion-searchbar></ion-searchbar>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Atendido por:</ion-label>
+          <ion-input disabled="true" value="profissional"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Servico</ion-label>
+          <ion-select>
+            <ion-select-option value="pacote">Corte</ion-select-option>
+            <ion-select-option value="pacote">Escova</ion-select-option>
+            <ion-select-option value="pacote">Dia das Mães</ion-select-option>
+            <ion-select-option value="pacote">Dia da Mulher</ion-select-option>
+            <ion-select-option value="pacote">Pé + Mão</ion-select-option>
+            <ion-select-option value="pacote">Corte Grátis R$100,00 em serviços</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-radio-group>
+          <ion-list-header>
+            <ion-label>Forma de Pagamento</ion-label>
+          </ion-list-header>
+          <ion-item>
+            <ion-label>Dinheiro</ion-label>
+            <ion-radio slot="start" value="dinheiro"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>Cartao</ion-label>
+            <ion-radio slot="start" value="cartao"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>Crediario</ion-label>
+            <ion-radio slot="start" value="crediario"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+        <ion-radio-group>
+          <ion-list-header>
+            <ion-label>Parcelas</ion-label>
+          </ion-list-header>
+          <ion-item>
+            <ion-label>A Vista</ion-label>
+            <ion-radio slot="start" value="vista"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>2x</ion-label>
+            <ion-radio slot="start" value="2x"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>3x</ion-label>
+            <ion-radio slot="start" value="3x"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+        <ion-item>
+          <ion-label slot="start">Total a Pagar:</ion-label>
+          <ion-input type="number" slot="end" disabled="true">0,00</ion-input>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ng-template>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col>
+        <ion-button (click)="onClick()">
+          <ion-icon slot="start" name="clock"></ion-icon> Agendar
+        </ion-button>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

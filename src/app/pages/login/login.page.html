@@ -1,0 +1,27 @@
+<ion-content padding class="primary-font bkgWoman">
+    <div style="height: 55vh"></div>
+    <form padding [formGroup]="loginForm" (submit)="login()" novalidate>
+      <ion-item>
+        <ion-input [(ngModel)]="email"
+                    formControlName="email"
+                    type="email"
+                    placeholder="Email"
+                    clearInput clearOnEdit="false">
+        </ion-input>
+      </ion-item>
+      <h6 *ngIf="erroEmail" class="error"> {{messageEmail}}</h6>
+      <div style="height: 1vh"></div>
+      <ion-item>
+        <ion-input [(ngModel)]="senha"
+                    formControlName="senha"
+                    type="password"
+                    placeholder="Senha"
+                    clearInput clearOnEdit="false">
+        </ion-input>
+      </ion-item>
+      <h6 *ngIf="erroSenha" class="error"> {{messageSenha}}</h6>
+      <ion-button type="submit" color="tertiary" expand="block" class="login-button" ion-button block outline>
+          Logar
+        </ion-button>
+    </form>
+  </ion-content>
